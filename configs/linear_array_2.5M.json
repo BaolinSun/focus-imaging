@@ -1,0 +1,14 @@
+{
+    "fc": 2500000.0,
+    "element_num": 64,
+    "pitch": 0.0003,
+    "width": 0.12e-3,
+    "kerf": 0.18e-3,
+    "fs": 25000000.0,
+    "c": 1540,
+    "tx_line_num": 16,
+    "rx_line_num": 64,
+    "sample_num": 2048,
+    "z_focus": 20e-3,
+    "fdemod": 0
+}
