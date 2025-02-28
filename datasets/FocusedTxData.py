@@ -90,6 +90,7 @@ class WUSData(FocusedTxData):
         self.sample_num = probe_params["sample_num"]
         self.fdemod = probe_params["fdemod"]
         self.z_focus = probe_params["z_focus"]
+        self.scan_angle = probe_params["scan_angle"]
 
         self.ele_pos = np.zeros((self.element_num, 3), dtype="float32")
         self.ele_pos[:, 0] = np.arange(self.element_num) * self.pitch
@@ -99,20 +100,29 @@ class WUSData(FocusedTxData):
         self.tx_ori[:, 0] = np.arange(self.nxmits) * self.pitch * 64.0 / self.nxmits
         self.tx_ori[:, 0] -= np.mean(self.tx_ori[:, 0])
 
-        self.rx_ori = np.zeros((self.element_num, 3), dtype="float32")
-        self.rx_ori[:, 0] = np.arange(self.element_num) * self.pitch * 64.0 / self.element_num
+        self.rx_ori = np.zeros((self.rx_line_num, 3), dtype="float32")
+        self.rx_ori[:, 0] = np.arange(self.rx_line_num) * self.pitch * 64.0 / self.rx_line_num
         self.rx_ori[:, 0] -= np.mean(self.rx_ori[:, 0])
     
-        self.tstart = np.ones((self.nxmits,), dtype="float32") * 3e-6
+        self.tstart = np.ones((self.nxmits,), dtype="float32") * 0e-6
 
         self.tx_foc = np.ones((self.nxmits,), dtype="float32") * self.z_focus
 
         self.tx_dir = np.zeros((self.nxmits, 2), dtype="float32")
-        self.rx_dir = np.zeros((self.element_num, 2), dtype="float32")
+        # self.rx_dir = np.zeros((self.element_num, 2), dtype="float32")
 
         self.idata = np.zeros((self.nxmits, self.element_num, self.sample_num), dtype="float32")
         self.qdata = np.zeros((self.nxmits, self.element_num, self.sample_num), dtype="float32")
 
+        # ========================ECHOCARDIOGRAPHY=====================
+        self.tx_ori *= 0
+        self.rx_ori *= 0
+
+        angles = np.linspace(-self.scan_angle, self.scan_angle, self.rx_line_num).tolist()
+        theta = np.radians(angles)
+        self.rx_dir = np.stack((theta, theta*0), axis=-1)
+
+        # =============================================================
         self.display_params()
         self.validate()
 

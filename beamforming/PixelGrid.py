@@ -2,6 +2,7 @@
 # Author:     Dongwoon Hyun (dongwoon.hyun@stanford.edu)
 # Created on: 2020-04-03
 import numpy as np
+import matplotlib.pyplot as plt
 
 eps = 1e-10
 
@@ -54,4 +55,5 @@ def make_foctx_grid(rlims, dr, oris, dirs):
     zz = rr * np.cos(tt) + oris[:, [2]]
     yy = 0 * xx
     grid = np.stack((xx, yy, zz), axis=-1)
+
     return grid

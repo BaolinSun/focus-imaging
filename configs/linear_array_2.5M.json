@@ -7,8 +7,9 @@
     "fs": 25000000.0,
     "c": 1540,
     "tx_line_num": 16,
-    "rx_line_num": 64,
-    "sample_num": 2048,
+    "rx_line_num": 32,
+    "scan_angle": 35,
+    "sample_num": 4096,
     "z_focus": 20e-3,
     "fdemod": 0
 }
