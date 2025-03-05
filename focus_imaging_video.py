@@ -11,7 +11,7 @@ from datasets.FocusedTxData import WUSData
 from beamforming.DAS import DAS_FT, DAS_FT_B
 from beamforming.PixelGrid import make_foctx_grid, make_pixel_grid
 
-F = WUSData('configs\linear_array_2.5M.json')
+F = WUSData('configs\phase_array_2.5M.json')
 
 rmax = F.scan_depth
 wvln = F.c / F.fc

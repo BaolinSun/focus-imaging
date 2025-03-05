@@ -91,6 +91,9 @@ class WUSData(FocusedTxData):
         self.fdemod = probe_params["fdemod"]
         self.z_focus = probe_params["z_focus"]
         self.scan_angle = probe_params["scan_angle"]
+        self.scan_depth = probe_params["scan_depth"]
+        self.drange = probe_params["drange"]
+        self.fnum = probe_params["f_num"]
 
         self.ele_pos = np.zeros((self.element_num, 3), dtype="float32")
         self.ele_pos[:, 0] = np.arange(self.element_num) * self.pitch
@@ -131,7 +134,7 @@ class WUSData(FocusedTxData):
 
         for n in range(self.nxmits):
             for i in range(self.element_num):
-                data[n, i, :] = self.bandpass_filter_rf_data(data[n, i, :], data.shape[2], 25e6, 1.0e6, 5.0e6)
+                data[n, i, :] = self.bandpass_filter_rf_data(data[n, i, :], data.shape[2], self.fs, 1.0e6, 5.0e6)
 
         iqdata = hilbert(data, axis=-1)
         self.idata = np.real(iqdata)
@@ -166,7 +169,11 @@ class WUSData(FocusedTxData):
         print(f"Central Frequency: {self.fc} Hz")
         print(f"Sampling Frequency: {self.fs} Hz")
         print(f"Speed of Sound: {self.c} m/s")
-        print(f"Transmit Events: {self.nxmits}")
         print(f"Sample Num: {self.sample_num}")
+        print(f"Transmit Events: {self.nxmits}")
         print(f"Rx Line Num: {self.rx_line_num}")
+        print(f"Scan angle: {self.scan_angle}")
+        print(f"Scan_depth: {self.scan_depth}")
+        print(f"drange: {self.drange}")
+        print(f"F#: {self.fnum}")
         print(f"Demodulation Frequency: {self.fdemod} Hz")

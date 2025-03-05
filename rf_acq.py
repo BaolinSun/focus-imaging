@@ -7,6 +7,7 @@ import shutil
 import threading
 import numpy as np
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 
 # =================================================================
@@ -39,7 +40,7 @@ def process_data(data):
         shutil.rmtree(rfdata_path)
     os.makedirs(rfdata_path)
 
-    for i in range(frame):
+    for i in tqdm(range(frame)):
         for j in range(angle):
             rfdata = data[i, j, :, :]
             np.savetxt(os.path.join('rfdata', f"rfdata_{i+1}_{j+1}.csv"), rfdata, delimiter=",", fmt="%d")

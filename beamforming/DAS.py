@@ -70,7 +70,7 @@ class DAS_FT_B(torch.nn.Module):
         qdas = torch.zeros((nx, nz), dtype=dtype, device=device)
 
         # Loop through all transmits
-        for t in tqdm(range(self.rx_line_num)):
+        for t in range(self.rx_line_num):
             data_line = math.floor(t / parallel_beam)
             txdel = torch.norm(self.grid[t] - self.rx_ori[t].unsqueeze(0), dim=-1)
             rxdel = delay_focus(self.grid[t].view(-1, 1, 3), self.ele_pos).T

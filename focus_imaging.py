@@ -5,27 +5,28 @@ import torch
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from beamforming.DAS import DAS_FT, DAS_FT_B
 from scipy.interpolate import griddata
 from datasets.FocusedTxData import WUSData
+from beamforming.DAS import DAS_FT, DAS_FT_B
 from beamforming.PixelGrid import make_foctx_grid, make_pixel_grid
 
-F = WUSData('configs\linear_array_2.5M.json')
+F = WUSData('configs\phase_array_2.5M.json')
 
-rmax = 125e-3
+rmax = F.scan_depth
 wvln = F.c / F.fc
 dr = wvln / 4
 rlims = [0, rmax]
 grid = make_foctx_grid(rlims, dr, F.rx_ori, F.rx_dir)
 scan_convert = True
-drange = 40
-fnum = 1
+drange = F.drange
+fnum = F.fnum
 
 das = DAS_FT_B(F, grid, rxfnum=fnum)
 
+
 rfdata = []
-for j in range(16):
-    df = pd.read_csv(f'rfdata/rfdata_10_{j+1}.csv', sep=',', header=None)
+for j in range(F.nxmits):
+    df = pd.read_csv(f'rfdata/rfdata_1_{j+1}.csv', sep=',', header=None)
     data = df.values
     data = (data - 512) / 512
     data = data.T

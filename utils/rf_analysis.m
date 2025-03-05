@@ -1,10 +1,10 @@
 % 1. 读取 CSV 文件数据（推荐使用 readmatrix，适用于纯数值文件）
-data = readmatrix('..\rfdata\rfdata_1_32.csv');
+data = readmatrix('rfdata\rfdata_1_32.csv');
 
 data = (data - 512) / 512;
 
 % 2. 选择需要进行频谱分析的信号（这里取第一列）
-signal = data(:,1);
+signal = data(:,16);
 
 % 3. 定义采样频率（单位：Hz），请根据实际数据修改
 fs = 25e6;  % 例如：1000 Hz

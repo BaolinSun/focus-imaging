@@ -18,3 +18,7 @@ Desktop.ini
 
 # custom
 /rfdata*
+/usimage*
+/usvideo*
+/rawdata
+*.mp4
