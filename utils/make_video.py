@@ -39,6 +39,7 @@ def images_to_video(image_folder, output_video, fps=30, frame_size=None):
             # frame = cv2.GaussianBlur(frame, (5, 5), sigmaX=1.0)
             # frame = frame[y1:y2, x1:x2]
 
+            # frame = cv2.convertScaleAbs(frame, alpha=1.3, beta=0)
 
             # 检查图像大小是否与指定的帧大小一致
             if (frame.shape[1], frame.shape[0]) != frame_size:
@@ -53,6 +54,6 @@ def images_to_video(image_folder, output_video, fps=30, frame_size=None):
 # 示例用法
 if __name__ == "__main__":
     image_folder = "usimage"  # 替换为你的图片文件夹路径
-    output_video = "usvideo/output21.mp4"          # 输出视频文件名
+    output_video = "usvideo/output28.mp4"          # 输出视频文件名
     fps = 5                                  # 帧率
     images_to_video(image_folder, output_video, fps)
