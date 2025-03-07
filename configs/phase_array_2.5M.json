@@ -12,7 +12,7 @@
     "scan_depth": 158e-3,
     "sample_num": 4096,
     "z_focus": 20e-3,
-    "drange": 40,
+    "drange": 60,
     "f_num": 1,
     "fdemod": 0
 }

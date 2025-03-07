@@ -9,7 +9,7 @@ from tqdm import tqdm
 from scipy.interpolate import griddata
 from datasets.FocusedTxData import WUSData
 from beamforming.DAS import DAS_FT, DAS_FT_B
-from beamforming.PixelGrid import make_foctx_grid, make_pixel_grid
+from beamforming.PixelGrid import make_foctx_grid, grid_scan_convert
 
 F = WUSData('configs\phase_array_2.5M.json')
 
@@ -40,32 +40,14 @@ for i in tqdm(range(18)):
     qdata = torch.tensor(F.qdata, dtype=torch.float, device=torch.device("cuda:0"))
     x = (idata, qdata)
 
-    # start_time = time.time()
-    # idas, qdas = das(x)
-    # iq = idas + 1j * qdas
-    # bimg = torch.abs(iq).T
 
-    # start_time = time.time()
     idas, qdas = das(x)
     idas, qdas = idas.detach().cpu().numpy(), qdas.detach().cpu().numpy()
     iq = idas + 1j * qdas
     bimg = np.abs(iq).T
 
-
-
-    # Scan convert if necessary
-    if scan_convert:
-        xlims = rlims[1] * np.array([-0.7, 0.7])
-        zlims = rlims[1] * np.array([0, 1])
-        img_grid = make_pixel_grid(xlims, zlims, wvln / 2, wvln / 2)
-        grid = np.transpose(scan_grid, (1, 0, 2))
-        g1 = np.stack((grid[:, :, 2], grid[:, :, 0]), -1).reshape(-1, 2)
-        g2 = np.stack((img_grid[:, :, 2], img_grid[:, :, 0]), -1).reshape(-1, 2)
-        bsc = griddata(g1, bimg.reshape(-1), g2, "linear", 1e-10)
-        bimg = np.reshape(bsc, img_grid.shape[:2])
-        grid = img_grid.transpose(1, 0, 2)
-
-    # print(time.time() - start_time)
+    # Scan convert
+    bimg, grid = grid_scan_convert(bimg, scan_grid, rlims, wvln / 2, wvln / 2)
 
     bimg = 20 * np.log10(bimg)  # Log-compress
     bimg -= np.amax(bimg)  # Normalize by max value

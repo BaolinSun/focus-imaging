@@ -3,6 +3,7 @@
 # Created on: 2020-04-03
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.interpolate import griddata
 
 eps = 1e-10
 
@@ -57,3 +58,16 @@ def make_foctx_grid(rlims, dr, oris, dirs):
     grid = np.stack((xx, yy, zz), axis=-1)
 
     return grid
+
+def grid_scan_convert(bimg, grid, rlims, dx, dz):
+    xlims = rlims[1] * np.array([-0.7, 0.7])
+    zlims = rlims[1] * np.array([0, 1])
+    img_grid = make_pixel_grid(xlims, zlims, dx, dz)
+    grid = np.transpose(grid, (1, 0, 2))
+    g1 = np.stack((grid[:, :, 2], grid[:, :, 0]), -1).reshape(-1, 2)
+    g2 = np.stack((img_grid[:, :, 2], img_grid[:, :, 0]), -1).reshape(-1, 2)
+    bsc = griddata(g1, bimg.reshape(-1), g2, "linear", 1e-10)
+    bimg = np.reshape(bsc, img_grid.shape[:2])
+    grid = img_grid.transpose(1, 0, 2)
+
+    return bimg, grid
